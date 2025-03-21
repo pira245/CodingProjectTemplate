@@ -46,7 +46,7 @@ Ideal scenarios and use cases for starting with this project.
 
 Below are some screenshots showcasing the project interface:
 
-<div style="display: flex; justify-content: space-around;">
+<div style="display: flex; justify-content: center; gap: 40px; align-items: center; padding: 20px 0; flex-wrap: wrap;">
     <img src="{{medialink_1}}" alt="Screenshot 1" width="200"/>
     <img src="{{medialink_2}}" alt="Screenshot 2" width="200"/>
     <img src="{{medialink_3}}" alt="Screenshot 3" width="200"/>
