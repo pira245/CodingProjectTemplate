@@ -15,7 +15,7 @@ Siga estos pasos para configurar el proyecto en su máquina local:
 ### 1. Clonar el repositorio
 
 ```bash
-git clone {{ProjectRepo}}
+git clone {{ProjectRepo}}.git
 ```
 
 ### 2. Crear un entorno virtual

@@ -15,7 +15,7 @@ Siga estos pasos para configurar el proyecto en su máquina local:
 ### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/pira245/PythonProjectTemplate
+git clone https://github.com/pira245/PythonProjectTemplate.git
 ```
 
 ### 2. Crear un entorno virtual

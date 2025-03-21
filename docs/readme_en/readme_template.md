@@ -15,7 +15,7 @@ Follow these steps to set up the project on your local machine:
 ### 1. Clone the Repository
 
 ```bash
-git clone {{ProjectRepo}}
+git clone {{ProjectRepo}}.git
 ```
 
 ### 2. Create a Virtual Environment
