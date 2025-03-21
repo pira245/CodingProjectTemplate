@@ -1,0 +1,13 @@
+Attribute,Value
+ProjectName,My Vscode Project Template
+ProjectRepo,https://github.com/pira245/PythonProjectTemplate
+ProjectAbout,"A well-structured, VSCode-optimized Python project template that is intuitive, easy to navigate, and enhances maintainability and collaboration."
+WhyProject,"This project setup enables developers to efficiently create a VSCode workspace, integrating project data with documentation and GitHub attributes."
+medialink_1,https://github.com/pira245/PythonProjectTemplate/docs/media/screenshot-1.png
+medialink_2,https://github.com/pira245/PythonProjectTemplate/docs/media/screenshot-2.png
+medialink_3,https://github.com/pira245/PythonProjectTemplate/docs/media/screenshot-3.png
+feature_1,Seamless Exploration
+feature_2,Maintains clear separation of concerns.
+feature_3,Bilingual documentation (Spanish and English).
+email,contact@example.com
+LicenceName,MIT license
