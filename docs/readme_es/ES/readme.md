@@ -47,9 +47,9 @@ Escenarios ideales y casos de uso para comenzar con este proyecto.
 A continuación, se muestran algunas capturas de pantalla que muestran la interfaz del proyecto:
 
 <div style="display: flex; justify-content: space-around;">
-    <img src="https://github.com/pira245/PythonProjectTemplate/docs/media/screenshot-1.png" alt="Captura de pantalla 1" width="200"/>
-    <img src="https://github.com/pira245/PythonProjectTemplate/docs/media/screenshot-2.png" alt="Captura de pantalla 2" width="200"/>
-    <img src="https://github.com/pira245/PythonProjectTemplate/docs/media/screenshot-3.png" alt="Captura de pantalla 3" width="200"/>
+    <img src="https://github.com/pira245/PythonProjectTemplate/blob/wema.main/docs/media/screenshot-1.png" alt="Captura de pantalla 1" width="200"/>
+    <img src="https://github.com/pira245/PythonProjectTemplate/blob/wema.main/docs/media/screenshot-2.png" alt="Captura de pantalla 2" width="200"/>
+    <img src="https://github.com/pira245/PythonProjectTemplate/blob/wema.main/docs/media/screenshot-3.png" alt="Captura de pantalla 3" width="200"/>
 </div>
 
 ### Características
