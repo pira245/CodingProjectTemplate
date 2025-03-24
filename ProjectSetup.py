@@ -93,7 +93,8 @@ class VSCodeConfigurator(ProjectConfig):
                 "python.analysis.aiCodeActions": {},
                 "python.analysis.extraPaths": [
                     os.path.join(self.project_dir, 'core'),
-                    os.path.join(self.project_dir, 'core/mytestunity')
+                    os.path.join(self.project_dir, 'core/core_package'),
+                    os.path.join(self.project_dir, 'core/tests')
                 ],
                 "python.testing.pytestPath": "(conda environement directory)\\Scripts\\pytest.exe",
                 "python.testing.pytestEnabled": True,
