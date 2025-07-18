@@ -1,8 +1,8 @@
-# Título del Proyecto: [My Vscode Project Template](https://github.com/pira245/PythonProjectTemplate)
+# Título del Proyecto: [Code-Project-Template](https://github.com/pira245/CodingProjectTemplate)
 
 ## Acerca de
 
-A well-structured, VSCode-optimized Python project template that is intuitive, easy to navigate, and enhances maintainability and collaboration.
+A well-structured, VSCode-optimized Python and javascript project template. Designed to be intuitive and easy to navigate, promoting better maintainability and seamless collaboration.
 
 ### ¿Por qué usar esta versión?
 
@@ -15,7 +15,7 @@ Siga estos pasos para configurar el proyecto en su máquina local:
 ### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/pira245/PythonProjectTemplate.git
+git clone https://github.com/pira245/CodingProjectTemplate.git
 ```
 
 ### 2. Crear un entorno virtual
@@ -47,9 +47,9 @@ Escenarios ideales y casos de uso para comenzar con este proyecto.
 A continuación, se muestran algunas capturas de pantalla que muestran la interfaz del proyecto:
 
 <div style="display: flex; justify-content: center; gap: 40px; align-items: center; padding: 20px 0; flex-wrap: wrap;">
-    <img src="https://github.com/pira245/PythonProjectTemplate/blob/wema.main/docs/media/screenshot-1.png" alt="Captura de pantalla 1" width="200"/>
-    <img src="https://github.com/pira245/PythonProjectTemplate/blob/wema.main/docs/media/screenshot-2.png" alt="Captura de pantalla 2" width="200"/>
-    <img src="https://github.com/pira245/PythonProjectTemplate/blob/wema.main/docs/media/screenshot-3.png" alt="Captura de pantalla 3" width="200"/>
+    <img src="https://github.com/pira245/CodingProjectTemplate/docs/media/screenshot-1.png" alt="Captura de pantalla 1" width="200"/>
+    <img src="https://github.com/pira245/CodingProjectTemplate/docs/media/screenshot-2.png" alt="Captura de pantalla 2" width="200"/>
+    <img src="https://github.com/pira245/CodingProjectTemplate/docs/media/screenshot-3.png" alt="Captura de pantalla 3" width="200"/>
 </div>
 
 ### Características
@@ -68,7 +68,7 @@ Este proyecto está licenciado bajo la licencia [MIT license](LICENSE.md). Consu
 
 Para cualquier consulta, póngase en contacto por correo electrónico:
 
-📧 **Correo electrónico:** contact@example.com
+📧 **Correo electrónico:** ricardo.pirabed@gmail.com
 
 ## Contribuciones
 
