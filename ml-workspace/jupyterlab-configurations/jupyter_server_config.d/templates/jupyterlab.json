@@ -1,0 +1,17 @@
+{
+  "ServerApp": {
+    "jpserver_extensions": {
+      "jupyterlab": true
+    }
+  },
+
+  "LabApp": {
+    
+    },
+  
+  "PasswordIdentityProvider": {
+    
+    }
+
+  }
+

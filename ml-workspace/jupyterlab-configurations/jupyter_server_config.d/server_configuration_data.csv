@@ -1,0 +1,11 @@
+variable,value,category
+ip,127.0.0.1,JupyterLab Application Settings
+base_url,/default-learning-env,JupyterLab Application Settings
+default_url,/lab,JupyterLab Application Settings
+custom_lab_extensions_path,D:\anaconda.resources\anaconda.environments\marketing_env\share\jupyter\labextensions,JupyterLab Extensions
+root_dir,d:\vscode.workspaces\ricardo.pirabed.github\Machine Learning\projects\marketing\core\core_package\notebooks_workspace,JupyterLab Workspaces 
+workspaces_dir,d:\vscode.workspaces\ricardo.pirabed.github\Machine Learning\projects\marketing\core\core_package\notebooks_workspace,JupyterLab Workspaces 
+default_url,/lab,JupyterLab Workspaces 
+workspaces_api_url,/api/workspaces,JupyterLab Workspaces 
+custom_css,d:\vscode.workspaces\ricardo.pirabed.github\Machine Learning\projects\marketing\core\notebooks\JupyterLab-Configurations\statics\assets\css\custom_jupyterlab_ui.css,JupyterLab Theming & UI Customization 
+custom_js,d:\vscode.workspaces\ricardo.pirabed.github\Machine Learning\projects\marketing\core\notebooks\JupyterLab-Configurations\statics\assets\js\custom_jupyterlab_script.js,JupyterLab Theming & UI Customization 

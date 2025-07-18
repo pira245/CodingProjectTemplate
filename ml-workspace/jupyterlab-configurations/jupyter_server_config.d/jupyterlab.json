@@ -1,0 +1,45 @@
+{
+    "ServerApp": {
+        "jpserver_extensions": {
+            "jupyterlab": true
+        },
+        "ip": "127.0.0.1",
+        "port": 9000,
+        "open_browser": false,
+        "allow_remote_access": true,
+        "base_url": "/default-learning-env",
+        "default_url": "/lab",
+        "shutdown_no_activity_timeout": 3600,
+        "root_dir": "d:\\vscode.workspaces\\ricardo.pirabed.github\\Machine Learning\\projects\\marketing\\core\\core_package\\notebooks_workspace",
+        "token": "your_secure_token_here",
+        "password_required": true,
+        "disable_check_xsrf": false,
+        "allow_origin": "*",
+        "max_body_size": 536870912,
+        "max_buffer_size": 536870912,
+        "limit_rate": true,
+        "tornado_settings": {
+            "websocket_max_message_size": 536870912
+        },
+        "kernel_manager_class": "jupyter_server.services.kernels.kernelmanager.AsyncMappingKernelManager"
+    },
+    "LabApp": {
+        "labextensions_path": [
+            "D:\\anaconda.resources\\anaconda.environments\\marketing_env\\share\\jupyter\\labextensions"
+        ],
+        "blocked_extensions_uris": [],
+        "extensions_in_dev_mode": false,
+        "expose_app_in_browser": true,
+        "workspaces_dir": "d:\\vscode.workspaces\\ricardo.pirabed.github\\Machine Learning\\projects\\marketing\\core\\core_package\\notebooks_workspace",
+        "default_url": "/lab",
+        "workspaces_api_url": "/api/workspaces",
+        "theme": "JupyterLab Dark",
+        "hide_sys_info": true,
+        "collaborative": true,
+        "custom_css": "d:\\vscode.workspaces\\ricardo.pirabed.github\\Machine Learning\\projects\\marketing\\core\\notebooks\\JupyterLab-Configurations\\statics\\assets\\css\\custom_jupyterlab_ui.css",
+        "custom_js": "d:\\vscode.workspaces\\ricardo.pirabed.github\\Machine Learning\\projects\\marketing\\core\\notebooks\\JupyterLab-Configurations\\statics\\assets\\js\\custom_jupyterlab_script.js"
+    },
+    "PasswordIdentityProvider": {
+        "hashed_password": "argon2:$argon2id$v=19$m=10240,t=10,p=8$o/s/3Se/u9p55IoZbD2InA$O+Donh9SvtXjnST+Vn3SO2JHQYkkhx3BLPYb8uQ0sB4"
+    }
+}

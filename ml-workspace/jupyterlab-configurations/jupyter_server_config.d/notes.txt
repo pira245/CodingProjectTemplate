@@ -1,0 +1,16 @@
+https://jupyterlab.readthedocs.io/en/stable/user/directories.html
+
+- check jupyter lab directories for advance usage:
+(conda environment)
+
+jupyter lab path 
+
+- See the locations of Jupyter config paths by running 
+(conda environment)
+
+jupyter --path.
+
+- Create a harsh password
+(conda environment)
+
+jupyter server password
