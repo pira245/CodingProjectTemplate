@@ -1,9 +1,12 @@
+# Final ProjectSetupCondaEnv.py
+# Platform support (Windows + Conda)
+
 import os
 import json
 import pandas as pd
 from dotenv import load_dotenv, set_key
 from dataclasses import dataclass
-from typing import List, Dict, Any
+from typing import Dict, Any
 
 
 @dataclass
@@ -11,40 +14,56 @@ class ProjectConfig:
     """Base configuration class handling common project properties"""
     project_dir: str = os.path.dirname(__file__)
     project_name: str = os.path.basename(project_dir).strip()
-    
+
     def __post_init__(self):
-        """Initialize derived properties after dataclass setup"""
-        self.project_env = os.path.join(self.project_dir, 'project.env')
-        self.project_csv = os.path.join(self.project_dir, 'project.csv')
+        """Initialize derived properties and create folders"""
+        self.project_env = os.path.join(self.project_dir, "project.env")
+        self.project_csv = os.path.join(self.project_dir, "project_metadata.csv")
+
+        # Required project subfolders
+        self.required_folders = ["app", "docs", "features", "scripts"]
+        for folder in self.required_folders:
+            os.makedirs(os.path.join(self.project_dir, folder), exist_ok=True)
+
         self._setup_env_vars()
-        
+
     def _setup_env_vars(self):
         """Initialize core environment variables"""
-        os.environ.update({
-            'ProjectName': self.project_name,
-            'ProjectDir': self.project_dir,
-            'ProjectEnv': self.project_env,
-            'ProjectCsv': self.project_csv
-        })
-        
+        os.environ.update(
+            {
+                "ProjectName": self.project_name,
+                "ProjectDir": self.project_dir,
+                "ProjectEnv": self.project_env,
+                "ProjectCsv": self.project_csv,
+            }
+        )
+
     def save_config(self):
         """Persist configuration to environment file"""
         load_dotenv(self.project_env)
-        for key in ['ProjectName', 'ProjectDir', 'ProjectEnv', 'ProjectCsv']:
-            set_key(self.project_env, key, os.environ[key])
+        for key in os.environ.keys():
+            if key.startswith("Project"):
+                set_key(self.project_env, key, os.environ[key])
+
 
 class VSCodeConfigurator(ProjectConfig):
-    """Handles VS Code workspace configuration"""
+    """Handles VS Code workspace configuration for Conda + Windows"""
+
     def __init__(self):
         super().__init__()
         self.subfolders = [f.path for f in os.scandir(self.project_dir) if f.is_dir()]
         self.workspace_file = None
-        
+
+        # Conda paths (adapt for Windows)
+        self.conda_env_dir = os.path.join(self.project_dir, ".conda_env")
+        self.python_executable = os.path.join(self.conda_env_dir, "python.exe")
+        self.pytest_executable = os.path.join(self.conda_env_dir, "Scripts", "pytest.exe")
+
     def configure_python_path(self):
         """Configure Python module search path"""
-        os.environ['PYTHONPATH'] = self.project_dir
+        os.environ["PYTHONPATH"] = self.project_dir
         set_key(self.project_env, "PYTHONPATH", self.project_dir)
-        
+
     def create_debug_config(self) -> Dict[str, Any]:
         """Generate debug configuration for VS Code"""
         return {
@@ -53,58 +72,63 @@ class VSCodeConfigurator(ProjectConfig):
             "request": "launch",
             "module": self.project_name,
             "env": {"PYTHONPATH": self.project_dir},
-            "console": "integratedTerminal"
+            "console": "integratedTerminal",
         }
-    
-    def create_my_first_tasks_config(self) -> Dict[str, Any]:
-        """Generate a dummy tasks configuration for VS Code"""
+
+    # --- Conda Task Generator ---
+    def create_conda_project_task(self) -> Dict[str, Any]:
         return {
-                "label": "My Dummy Task",
-                "command": "echo hello World",
-                "type": "shell",
-                "args": [],
-                "problemMatcher": [
-                    "$tsc"
-                ],
-                "presentation": {
-                    "reveal": "always"
-                },
-                "group": "build"
+            "label": "create_conda_project",
+            "type": "shell",
+            "windows": {"command": ".\\scripts\\create_conda_project_task.cmd"},
+            "args": [],
+            "options": {"cwd": "${workspaceFolder}"},
+            "problemMatcher": [],
+            "presentation": {"reveal": "always", "panel": "new"},
+            "group": "build",
         }
-        
+
     def build_workspace(self):
         """Create and configure VS Code workspace file"""
         config = {
             "folders": [],
             "settings": {
-                "terminal.integrated.env.windows": {"PATH": "${env:anaconda_environment};"},
+                "terminal.integrated.env.windows": {
+                    "PATH": "${env:anaconda_environment};"
+                },
                 "terminal.integrated.cwd": self.project_dir,
                 "workbench.editor.languageDetection": True,
                 "files.autoSave": "afterDelay",
                 "diffEditor.renderSideBySide": True,
                 "breadcrumbs.enabled": True,
                 "editor.minimap.enabled": True,
-                "python.defaultInterpreterPath": "(conda environement directory-or-python directory)\\python.exe",
+                # Python defaults for Conda on Windows
+                "python.defaultInterpreterPath": self.python_executable,
                 "python.envFile": self.project_env,
                 "python.experiments.enabled": True,
                 "python.experiments.optInto": [],
                 "python.experiments.optOutFrom": [],
                 "python.globalModuleInstallation": False,
-                "python.analysis.aiCodeActions": {},
+                "python.analysis.aiCodeActions": {"enabled": True},
+                "python.analysis.include": [self.project_dir],
                 "python.analysis.extraPaths": [
-                    os.path.join(self.project_dir, 'core'),
-                    os.path.join(self.project_dir, 'core/core_package'),
-                    os.path.join(self.project_dir, 'core/tests')
+                    os.path.join(self.project_dir, "app"),
+                    os.path.join(self.project_dir, "features"),
+                    os.path.join(self.project_dir, "docs"),
+                    os.path.join(self.project_dir, "scripts"),
+                    os.path.join(self.project_dir, "app/tests"),
                 ],
-                "python.testing.pytestPath": "(conda environement directory)\\Scripts\\pytest.exe",
+                "python.testing.pytestPath": self.pytest_executable,
                 "python.testing.pytestEnabled": True,
                 "python.testing.unittestEnabled": False,
-                "python.testing.pytestArgs": [  
-                    "--maxfail=3", 
-                    "-v",  
+                "python.testing.pytestArgs": [
+                    "--maxfail=3",
+                    "-v",
                     "--tb=short",
-                    "-k", "run_test"
+                    "-k",
+                    "run_test",
                 ],
+                # Project Manager defaults
                 "projectManager": {
                     "any": {"baseFolders": [self.project_dir]},
                     "git": {"baseFolders": [self.project_dir]},
@@ -114,46 +138,59 @@ class VSCodeConfigurator(ProjectConfig):
                         "Data Science",
                         "Web Development",
                         "Google SDK Python",
-                        "Databases", 
+                        "Databases",
                         "Industrial Automation",
                         "Industrial Control",
                         "Industrial Instrumentation",
                         "Industrial Application",
-                        "IOT"
-                        ]
-                }
+                        "IOT",
+                    ],
+                },
+                "python.analysis.enableTroubleshootMissingImports": True,
+                "python.analysis.importFormat": "absolute",
+                "python-envs.pythonProjects": [],
             },
             "launch": {"configurations": []},
-            "tasks": {"version": "2.0.0", "tasks": []}
+            "tasks": {"version": "2.0.0", "tasks": []},
         }
-        
+
         # Add debug configuration
-        debug_config = json.dumps(self.create_debug_config())
-        config["launch"]["configurations"].append(json.loads(debug_config))
-        # Add a task configuration
-        task_config = json.dumps(self.create_my_first_tasks_config())
-        config["tasks"]["tasks"].append(json.loads(task_config))
-        
-        # Add folder paths
-        config["folders"] = [{"path": os.path.basename(f)} for f in self.subfolders]
-        
+        config["launch"]["configurations"].append(self.create_debug_config())
+        # Add Conda project task
+        config["tasks"]["tasks"].append(self.create_conda_project_task())
+
+        # Filter folders (exclude .git, .pytest_cache)
+        self.workspace_subfolders = [
+            f
+            for f in self.subfolders
+            if os.path.basename(f) not in [".git", ".pytest_cache"]
+        ]
+        config["folders"] = [
+            {"path": os.path.basename(f)} for f in self.workspace_subfolders
+        ]
+
         # Save workspace file
-        vscode_dir = os.path.join(self.project_dir, '.vscode')
+        vscode_dir = os.path.join(self.project_dir, ".vscode")
         os.makedirs(vscode_dir, exist_ok=True)
-        
-        self.workspace_file = os.path.join(vscode_dir, f'{self.project_name}.code-workspace')
-        with open(self.workspace_file, 'w') as f:
+
+        self.workspace_file = os.path.join(
+            vscode_dir, f"{self.project_name}.code-workspace"
+        )
+        with open(self.workspace_file, "w", encoding="utf-8") as f:
             json.dump(config, f, indent=4)
-            
-        os.environ['vscode_workspace'] = self.workspace_file
+
+        os.environ["vscode_workspace"] = self.workspace_file
         set_key(self.project_env, "vscode_workspace", self.workspace_file)
+
 
 class CommentHandler(ProjectConfig):
     """Handles insertion of documentation comments in workspace file"""
+
     COMMENT_TEMPLATE = {
-        "settings": "// Controls the settings that apply to all profiles",
-        "launch": "// Add debugging configurations to project",
-        "tasks": "// Automate project tasks"
+        "settings": "// Controls the settings that apply to all profiles (editor, python, project manager)",
+        "launch": "// Add debugging configurations to project (debugging Python modules)",
+        "tasks": "// Automate project tasks\n"
+        "// - Group 'build': manages conda project setup and virtual environment creation",
     }
 
     def __init__(self):
@@ -163,90 +200,122 @@ class CommentHandler(ProjectConfig):
     def add_comments(self):
         """Insert documentation comments at appropriate locations in workspace file"""
         try:
-            with open(self.workspace_file, 'r+', encoding='utf-8') as f:
+            with open(self.workspace_file, "r+", encoding="utf-8") as f:
                 content = f.read()
-                
-                # Insert comments before each section
                 for section, comment in self.COMMENT_TEMPLATE.items():
                     insert_pos = content.find(f'"{section}":')
                     if insert_pos != -1:
-                        content = content[:insert_pos] + f'// {comment}\n' + content[insert_pos:]
-
-                # Write updated content back to file
+                        content = (
+                            content[:insert_pos] + f"{comment}\n" + content[insert_pos:]
+                        )
                 f.seek(0)
                 f.write(content)
                 f.truncate()
-
         except (OSError, FileNotFoundError) as e:
             print(f"Error updating workspace comments: {str(e)}")
 
+
 class ProjectMetadataHandler(ProjectConfig):
-    """Handles project metadata generation and storage"""
-    METADATA_TEMPLATE = {
-        "ProjectName": ["Code-Project-Template"],
-        "LinkProjectRepo": ["https://github.com/pira245/CodingProjectTemplate"],
-        "ImageName": ["CodeProjectTemplate.png"],
-        "LinkImageRepo": ["https://github.com/pira245/CodingProjectTemplate/docs/media"],
-        "Category": ["Template-Coding-Project"],
-        "ProjectAbout": ["VSCode-optimized Python project template emphasizing maintainability and collaboration."]
-    }
+    """Handles project metadata generation and documentation export"""
+
+    DEFAULT_DATA = [
+        {"attributes": "ProjectName", "value": "name", "general": 1, "documentation": 1},
+        {
+            "attributes": "ProjectRepo",
+            "value": "https://github.com/account/name",
+            "general": 1,
+            "documentation": 1,
+        },
+        {
+            "attributes": "ImageName",
+            "value": "CodeProjectTemplate.png",
+            "general": 1,
+            "documentation": 0,
+        },
+        {
+            "attributes": "LinkImageRepo",
+            "value": "https://github.com/account/name/docs/media",
+            "general": 1,
+            "documentation": 0,
+        },
+        {"attributes": "Category", "value": "Python", "general": 1, "documentation": 0},
+        {
+            "attributes": "ProjectAbout",
+            "value": "A python project to delivery a task or a value",
+            "general": 1,
+            "documentation": 1,
+        },
+        {
+            "attributes": "WhyProject",
+            "value": "To satisfy an On-brand or On-product demand",
+            "general": 0,
+            "documentation": 1,
+        },
+        {
+            "attributes": "medialink_1",
+            "value": "https://github.com/account/name/docs/media/screenshot-1.png",
+            "general": 0,
+            "documentation": 1,
+        },
+        {
+            "attributes": "medialink_2",
+            "value": "https://github.com/account/name/docs/media/screenshot-2.png",
+            "general": 0,
+            "documentation": 1,
+        },
+        {
+            "attributes": "medialink_3",
+            "value": "https://github.com/account/name/docs/media/screenshot-3.png",
+            "general": 0,
+            "documentation": 1,
+        },
+        {
+            "attributes": "feature_1",
+            "value": "Best feature option 1",
+            "general": 0,
+            "documentation": 1,
+        },
+        {
+            "attributes": "feature_2",
+            "value": "Best feature option 2",
+            "general": 0,
+            "documentation": 1,
+        },
+        {
+            "attributes": "feature_3",
+            "value": "Bilingual documentation (Spanish and English).",
+            "general": 0,
+            "documentation": 1,
+        },
+        {
+            "attributes": "email",
+            "value": "my.mail@gmail.com",
+            "general": 0,
+            "documentation": 1,
+        },
+        {
+            "attributes": "LicenceName",
+            "value": "license",
+            "general": 0,
+            "documentation": 1,
+        },
+    ]
 
     def __init__(self):
         super().__init__()
-        self.df = pd.DataFrame(self.METADATA_TEMPLATE)
+        self.df = pd.DataFrame(self.DEFAULT_DATA)
 
     def generate_metadata(self):
-        """Generate and save project metadata to CSV file"""
-        try:
+        """Generate metadata and documentation CSV files"""
+        if not os.path.exists(self.project_csv):
             self.df.to_csv(self.project_csv, index=False)
             set_key(self.project_env, "ProjectCsv", self.project_csv)
-        except (FileNotFoundError, PermissionError) as e:
-            print(f"Metadata generation failed: {str(e)}")
 
-class ProjectDataHandler(ProjectConfig):
-    """Handles project data generation and storage for docs folder"""
-    DATA_TEMPLATE = {
-        "Attribute": [
-            "ProjectName", 
-            "ProjectRepo", 
-            "ProjectAbout", 
-            "WhyProject", 
-            "medialink_1", 
-            "medialink_2", 
-            "medialink_3", 
-            "feature_1", 
-            "feature_2", 
-            "feature_3", 
-            "email",
-            "LicenceName"],
-        "Value": [
-            "My Vscode Project Template", 
-            "https://github.com/pira245/CodingProjectTemplate", 
-            "A well-structured, VSCode-optimized Python project template that is intuitive, easy to navigate, and enhances maintainability and collaboration.", 
-            "This project setup enables developers to efficiently create a VSCode workspace, integrating project data with documentation and GitHub attributes.", 
-            "https://github.com/pira245/CodingProjectTemplate/docs/media/screenshot-1.png", 
-            "https://github.com/pira245/CodingProjectTemplate/docs/media/screenshot-2.png", 
-            "https://github.com/pira245/CodingProjectTemplate/docs/media/screenshot-3.png", 
-            "Seamless Exploration", 
-            "Maintains clear separation of concerns.", 
-            "Bilingual documentation (Spanish and English).", 
-            "contact@example.com",
-            "MIT license"]
-    }
-    def __init__(self):
-        super().__init__()
-        self.df = pd.DataFrame(self.DATA_TEMPLATE)
-        self.en_data_csv_path = os.path.join(self.project_dir, 'docs/readme_en/data.csv')
-        self.es_data_csv_path = os.path.join(self.project_dir, 'docs/readme_es/data.csv')
-
-    def generate_data(self):
-        """Generate and save project data to CSV file"""
-        try:
-            self.df.to_csv(self.en_data_csv_path, index=False)
-            self.df.to_csv(self.es_data_csv_path, index=False)
-        except (FileNotFoundError, PermissionError) as e:
-            print(f"Data generation failed: {str(e)}")
-
+        docs_dir = os.path.join(self.project_dir, "docs")
+        os.makedirs(docs_dir, exist_ok=True)
+        docs_csv = os.path.join(docs_dir, "documentation_data.csv")
+        doc_df = self.df[self.df["documentation"] == 1]
+        doc_df.to_csv(docs_csv, index=False)
 
 
 if __name__ == "__main__":
@@ -263,10 +332,6 @@ if __name__ == "__main__":
     comment_handler = CommentHandler()
     comment_handler.add_comments()
 
-    # Generate project metadata
+    # Generate project metadata + documentation
     metadata_handler = ProjectMetadataHandler()
     metadata_handler.generate_metadata()
-
-    # Generate project data
-    data_handler = ProjectDataHandler()
-    data_handler.generate_data()
